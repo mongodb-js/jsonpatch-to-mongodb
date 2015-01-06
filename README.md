@@ -18,7 +18,7 @@ console.log(toMongodb(patches));
 // {'$set': {name: 'dave'}};
 ```
 
-Example: [with express and mongoose](tree/master/examples/express)
+Example: [with express and mongoose](http://github.com/imlucas/jsonpatch-to-mongodb/tree/master/examples/express)
 
 
 ## Install
