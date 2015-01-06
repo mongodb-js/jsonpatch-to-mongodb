@@ -1,0 +1,21 @@
+{
+  "name": "jsonpatch-to-mongodb-example-express",
+  "version": "0.0.0",
+  "description": "Using jsonpatch-to-mongodb with express",
+  "dependencies": {
+    "body-parser": "~1.10.1",
+    "express": "~4.10.7",
+    "jiff": "~0.7.0",
+    "mongoose": "~3.8.21"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Lucas Hrabovsky <hrabovsky.lucas@gmail.com> (http://imlucas.com)",
+  "license": "MIT",
+  "homepage": "http://github.com/imlucas/jsonpatch-to-mongodb",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/imlucas/jsonpatch-to-mongodb.git"
+  }
+}
