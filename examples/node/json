@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 129
+ETag: W/"81-17478c4d"
+Date: Tue, 06 Jan 2015 18:33:10 GMT
+Connection: keep-alive
+
+[{"_id":1,"name":"","type":"dog","__v":0},{"_id":2,"name":"","type":"cat","__v":0},{"_id":3,"name":"","type":"seabeast","__v":0}]
