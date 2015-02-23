@@ -9,7 +9,8 @@ mongoose.set('debug', true);
 var Pet = mongoose.model('Pet', {
   _id: Number,
   name: String,
-  type: String
+  type: String,
+  type_2: String
 }, 'pets');
 
 
@@ -82,7 +83,8 @@ function update(done) {
   async.series([
     updatePet(1, {type: 'dog'}, {name: 'Arlo', type: 'dog'}),
     updatePet(2, {type: 'cat'}, {name: 'Basil', type: 'cat'}),
-    updatePet(3, {type: 'seabeast'}, {name: 'Kochka', type: 'cat'})
+    updatePet(3, {type: 'seabeast'}, {name: 'Kochka', type: 'cat'}),
+    updatePet(3, {type: 'seabeast'}, {name: 'Kochka', type2: 'seabeast'})
   ], function(err, result){
     done(err);
   });
