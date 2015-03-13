@@ -4,7 +4,7 @@ var chai = require('chai');
 
 describe('jsonpatch to mongodb', function() {
 
-  it('should work with add', function() {
+  it('should work with single add', function() {
     var patches = [{
       op: 'add',
       path: '/name',
@@ -14,6 +14,30 @@ describe('jsonpatch to mongodb', function() {
     var expected = {
       $push: {
         name: 'dave'
+      }
+    };
+
+    assert.deepEqual(toMongodb(patches), expected);
+  });
+
+  it('should work with multiple adds', function() {
+    var patches = [{
+      op: 'add',
+      path: '/name',
+      value: 'dave'
+    },{
+      op: 'add',
+      path: '/name',
+      value: 'bob'
+    },{
+      op: 'add',
+      path: '/name',
+      value: 'john'
+    }];
+
+    var expected = {
+      $push: {
+        name: {$each: ['dave', 'bob', 'john']}
       }
     };
 

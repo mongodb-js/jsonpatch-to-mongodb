@@ -4,8 +4,16 @@ module.exports = function(patches){
   var update = {};
   patches.map(function(p){
     if(p.op === 'add'){
+      var path = toDot(p.path);
       if(!update.$push) update.$push = {};
-      update.$push[toDot(p.path)] = p.value;
+      if(!update.$push[path]) {
+        update.$push[path] = p.value;
+      } else if (update.$push[path]) {
+        if(!update.$push[path].$each) {
+          update.$push[path] = {$each : [update.$push[path]]};
+        }
+        update.$push[path].$each.push(p.value);
+      }
     }
     else if(p.op === 'remove'){
       if(!update.$unset) update.$unset = {};
