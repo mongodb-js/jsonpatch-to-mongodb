@@ -1,6 +1,6 @@
 # jsonpatch-to-mongodb
 
-[![build status](https://secure.travis-ci.org/imlucas/jsonpatch-to-mongodb.png)](http://travis-ci.org/imlucas/jsonpatch-to-mongodb)
+[![build status](https://secure.travis-ci.org/mongodb-js/jsonpatch-to-mongodb.png)](http://travis-ci.org/mongodb-js/jsonpatch-to-mongodb)
 
 Convert [JSON patches](http://jsonpatch.com/) into a MongoDB update.
 
