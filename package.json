@@ -4,10 +4,10 @@
   "description": "Convert JSON patches into a MongoDB update",
   "author": "Lucas Hrabovsky <hrabovsky.lucas@gmail.com> (http://imlucas.com)",
   "license": "MIT",
-  "homepage": "http://github.com/imlucas/jsonpatch-to-mongodb",
+  "homepage": "http://github.com/mongodb-js/jsonpatch-to-mongodb",
   "repository": {
     "type": "git",
-    "url": "git://github.com/imlucas/jsonpatch-to-mongodb.git"
+    "url": "git://github.com/mongodb-js/jsonpatch-to-mongodb.git"
   },
   "keywords": [
     "mongodb.js",
