@@ -20,7 +20,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "jsonpath-to-dot": "~0.1.0"
+    "jsonpath-to-dot": "~0.2.0"
   },
   "devDependencies": {
     "chai": "^2.0.0",
