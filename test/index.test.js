@@ -12,7 +12,7 @@ describe('jsonpatch to mongodb', function() {
     }];
 
     var expected = {
-      $push: {
+      $set: {
         name: 'dave'
       }
     };
