@@ -9,7 +9,10 @@ module.exports = function(patches){
     }
     else if(p.op === 'remove'){
       if(!update.$unset) update.$unset = {};
+      if(!update.$pull) update.$pull = {};
       update.$unset[toDot(p.path)] = 1;
+      var pullPath = toDot(p.path).replace(/\.[0-9]*$/, '');
+      update.$pull[pullPath] = null;
     }
     else if(p.op !== 'test') {
       throw new Error('Unsupported Operation! op = ' + p.op);
