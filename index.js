@@ -5,8 +5,16 @@ module.exports = function(patches){
 
   patches.map(function(p){
     if(p.op === 'add' || p.op === 'replace'){
-      if(!update.$set) update.$set = {};
-      update.$set[toDot(p.path)] = p.value;
+        var path = toDot(p.path);
+        if(!update.$set) update.$set = {};
+        if(!update.$set[path]) {
+            update.$set[path] = p.value;
+        } else if (update.$set[path]) {
+            if(!update.$set[path].$each) {
+                update.$set[path] = {$each : [update.$set[path]]};
+            }
+            update.$set[path].$each.push(p.value);
+        }
     }
     else if(p.op === 'remove'){
 

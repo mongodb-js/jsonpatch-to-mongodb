@@ -36,7 +36,7 @@ describe('jsonpatch to mongodb', function() {
     }];
 
     var expected = {
-      $push: {
+      $set: {
         name: {$each: ['dave', 'bob', 'john']}
       }
     };
@@ -54,6 +54,9 @@ describe('jsonpatch to mongodb', function() {
     var expected = {
       $unset: {
         name: 1
+      },
+      $pull: {
+        name: null
       }
     };
 
@@ -71,6 +74,30 @@ describe('jsonpatch to mongodb', function() {
       $set: {
         name: 'dave'
       }
+    };
+
+    assert.deepEqual(toMongodb(patches), expected);
+  });
+
+  it('should work with multiple replace', function() {
+    var patches = [{
+        op: 'replace',
+        path: '/name',
+        value: 'dave'
+    },{
+        op: 'replace',
+        path: '/name',
+        value: 'bob'
+    },{
+        op: 'replace',
+        path: '/name',
+        value: 'john'
+    }];
+
+    var expected = {
+        $set: {
+            name: {$each: ['dave', 'bob', 'john']}
+        }
     };
 
     assert.deepEqual(toMongodb(patches), expected);
