@@ -20,53 +20,6 @@ describe('jsonpatch to mongodb', function() {
     assert.deepEqual(toMongodb(patches), expected);
   });
 
-  it('should work with array set', function() {
-    var patches = [{
-      op: 'add',
-      path: '/name/1',
-      value: 'dave'
-    }];
-
-    var expected = {
-      $set: {
-        name: {
-          $each: [
-            'dave'
-          ],
-          $position: 1
-        }
-      }
-    };
-
-    assert.deepEqual(toMongodb(patches), expected);
-  });
-
-  it('should work with multiple set', function() {
-    var patches = [{
-      op: 'add',
-      path: '/name/1',
-      value: 'dave'
-    }, {
-      op: 'add',
-      path: '/name/2',
-      value: 'bob'
-    }];
-
-    var expected = {
-      $set: {
-        name: {
-          $each: [
-            'dave',
-            'bob'
-          ],
-          $position: 1
-        }
-      }
-    };
-
-    assert.deepEqual(toMongodb(patches), expected);
-  });
-
   it('should work with multiple adds', function() {
     var patches = [{
       op: 'add',
@@ -83,7 +36,7 @@ describe('jsonpatch to mongodb', function() {
     }];
 
     var expected = {
-      $set: {
+      $push: {
         name: {$each: ['dave', 'bob', 'john']}
       }
     };
@@ -101,16 +54,13 @@ describe('jsonpatch to mongodb', function() {
     var expected = {
       $unset: {
         name: 1
-      },
-      $pull: {
-        name: null
       }
     };
 
     assert.deepEqual(toMongodb(patches), expected);
   });
 
-  it('should work with single replace', function() {
+  it('should work with replace', function() {
     var patches = [{
       op: 'replace',
       path: '/name',
@@ -120,32 +70,6 @@ describe('jsonpatch to mongodb', function() {
     var expected = {
       $set: {
         name: 'dave'
-      }
-    };
-
-    assert.deepEqual(toMongodb(patches), expected);
-  });
-
-  it('should work with multiple replaces', function() {
-    var patches = [{
-      op: 'replace',
-      path: '/name/1',
-      value: 'dave'
-    }, {
-      op: 'replace',
-      path: '/name/2',
-      value: 'bob'
-    }];
-
-    var expected = {
-      $set: {
-        name: {
-          $each: [
-            'dave',
-            'bob'
-          ],
-          $position: 1
-        }
       }
     };
 
