@@ -3,7 +3,8 @@ var toDot = require('jsonpath-to-dot');
 module.exports = function(patches){
   var update = {};
   patches.map(function(p){
-    if(p.op === 'add'){
+    switch(p.op) {
+    case 'add':
       var path = toDot(p.path),
         parts = path.split('.');
 
@@ -47,16 +48,18 @@ module.exports = function(patches){
           update.$push[path] = p.value;
         }
       }
-    }
-    else if(p.op === 'remove'){
+      break;
+    case 'remove':
       if(!update.$unset) update.$unset = {};
       update.$unset[toDot(p.path)] = 1;
-    }
-    else if(p.op === 'replace'){
+      break;
+    case 'replace':
       if(!update.$set) update.$set = {};
       update.$set[toDot(p.path)] = p.value;
-    }
-    else if(p.op !== 'test') {
+      break;
+    case 'test':
+      break;
+    default:
       throw new Error('Unsupported Operation! op = ' + p.op);
     }
   });
