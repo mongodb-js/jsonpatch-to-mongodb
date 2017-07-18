@@ -17,7 +17,6 @@ module.exports = function(patches){
         if (update.$push[key]) {
           if (!isNaN(update.$push[key].$position)) {
             $position = update.$push[key].$position;
-            delete update.$push[key].$position;
           }
 
           if (!update.$push[key].$each) {
