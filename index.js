@@ -50,11 +50,11 @@ module.exports = function(patches){
       }
       break;
     case 'remove':
-      if(!update.$unset) update.$unset = {};
+      update.$unset = update.$unset || {};
       update.$unset[toDot(p.path)] = 1;
       break;
     case 'replace':
-      if(!update.$set) update.$set = {};
+      update.$set = update.$set || {};
       update.$set[toDot(p.path)] = p.value;
       break;
     case 'test':
