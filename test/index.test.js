@@ -7,7 +7,7 @@ describe('jsonpatch to mongodb', function() {
   it('should work with single add', function() {
     var patches = [{
       op: 'add',
-      path: '/name',
+      path: '/name/-',
       value: 'dave'
     }];
 
@@ -70,15 +70,15 @@ describe('jsonpatch to mongodb', function() {
   it('should work with multiple adds', function() {
     var patches = [{
       op: 'add',
-      path: '/name',
+      path: '/name/-',
       value: 'dave'
     },{
       op: 'add',
-      path: '/name',
+      path: '/name/-',
       value: 'bob'
     },{
       op: 'add',
-      path: '/name',
+      path: '/name/-',
       value: 'john'
     }];
 

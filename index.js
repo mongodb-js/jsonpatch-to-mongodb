@@ -8,8 +8,10 @@ module.exports = function(patches){
       var path = toDot(p.path),
         parts = path.split('.');
 
-      var key = parts[0];
-      var $position = parts[1] && parseInt(parts[1], 10);
+      var lastPart = parts[parts.length - 1];
+      var addToEnd = lastPart === '-';
+      var key = parts.slice(0, -1).join('.');
+      var $position = lastPart && parseInt(lastPart, 10);
 
       update.$push = update.$push || {};
 
@@ -42,9 +44,9 @@ module.exports = function(patches){
               $each: [update.$push[key]]
             };
           }
-          update.$push[path].$each.push(p.value);
+          update.$push[addToEnd ? key : path].$each.push(p.value);
         } else {
-          update.$push[path] = p.value;
+          update.$push[addToEnd ? key : path] = p.value;
         }
       }
       break;
