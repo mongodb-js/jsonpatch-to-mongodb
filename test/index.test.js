@@ -135,6 +135,16 @@ describe('jsonpatch to mongodb', function() {
     assert.deepEqual(toMongodb(patches), expected);
   });
 
+  it('should blow up on add without position', function() {
+    var patches = [{
+      op: 'add',
+      path: '/name',
+      value: 'dave'
+    }];
+
+    chai.expect(function(){toMongodb(patches)}).to.throw("Unsupported Operation! can't use add op without position");
+  });
+
   it('should blow up on move', function() {
     var patches = [{
       op: 'move',

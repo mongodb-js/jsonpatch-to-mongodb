@@ -37,17 +37,19 @@ module.exports = function(patches){
             $position: $position
           };
         }
-      } else {
+      } else if(addToEnd) {
         if (update.$push[key]) {
           if (!update.$push[key].$each) {
             update.$push[key] = {
               $each: [update.$push[key]]
             };
           }
-          update.$push[addToEnd ? key : path].$each.push(p.value);
+          update.$push[key].$each.push(p.value);
         } else {
-          update.$push[addToEnd ? key : path] = p.value;
+          update.$push[key] = p.value;
         }
+      } else {
+        throw new Error("Unsupported Operation! can't use add op without position");
       }
       break;
     case 'remove':
