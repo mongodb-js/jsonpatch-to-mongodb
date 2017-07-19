@@ -20,6 +20,22 @@ describe('jsonpatch to mongodb', function() {
     assert.deepEqual(toMongodb(patches), expected);
   });
 
+  it('should work with escaped characters', function() {
+    var patches = [{
+      op: 'replace',
+      path: '/foo~1bar~0',
+      value: 'dave'
+    }];
+
+    var expected = {
+      $set: {
+        "foo/bar~": 'dave'
+      }
+    };
+
+    assert.deepEqual(toMongodb(patches), expected);
+  });
+
   it('should work with array set', function() {
     var patches = [{
       op: 'add',

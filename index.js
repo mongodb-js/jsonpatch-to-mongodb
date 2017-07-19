@@ -1,4 +1,6 @@
-var toDot = require('jsonpath-to-dot');
+function toDot(path) {
+  return path.replace(/^\//, '').replace(/\//g, '.').replace(/~1/g, '/').replace(/~0/g, '~');
+}
 
 module.exports = function(patches){
   var update = {};
