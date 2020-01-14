@@ -1,62 +1,68 @@
-var toDot = require('jsonpath-to-dot');
+function toDot(path) {
+  return path.replace(/^\//, '').replace(/\//g, '.').replace(/~1/g, '/').replace(/~0/g, '~');
+}
 
 module.exports = function(patches){
   var update = {};
   patches.map(function(p){
-    if(p.op === 'add'){
+    switch(p.op) {
+    case 'add':
       var path = toDot(p.path),
         parts = path.split('.');
 
-      var key = parts[0];
-      var $position = parts[1] && parseInt(parts[1], 10);
+      var positionPart = parts.length > 1 && parts[parts.length - 1];
+      var addToEnd = positionPart === '-';
+      var key = parts.slice(0, -1).join('.');
+      var $position = positionPart && parseInt(positionPart, 10) || null;
 
       update.$push = update.$push || {};
 
-      if (!isNaN($position)) {
-        if (update.$push[key]) {
-          if (!isNaN(update.$push[key].$position)) {
-            $position = update.$push[key].$position;
-            delete update.$push[key].$position;
-          }
-
-          if (!update.$push[key].$each) {
-            update.$push[key] = {
-              $each: [
-                update.$push[key]
-              ]
-            };
-          }
-
-          update.$push[key].$each.push(p.value);
-          update.$push[key].$position = $position;
-        } else {
+      if ($position !== null) {
+        if (update.$push[key] === undefined) {
           update.$push[key] = {
             $each: [p.value],
             $position: $position
           };
+        } else {
+          if (update.$push[key] === null || update.$push[key].$position === undefined) {
+            throw new Error("Unsupported Operation! can't use add op with mixed positions");
+          }
+          var posDiff = $position - update.$push[key].$position;
+          if (posDiff > update.$push[key].$each.length) {
+            throw new Error("Unsupported Operation! can use add op only with contiguous positions");
+          }
+          update.$push[key].$each.splice(posDiff, 0, p.value);
+          update.$push[key].$position = Math.min($position, update.$push[key].$position);
         }
-      } else {
-        if (update.$push[key]) {
-          if (!update.$push[key].$each) {
+      } else if(addToEnd) {
+        if (update.$push[key] === undefined) {
+          update.$push[key] = p.value;
+        } else {
+          if (update.$push[key] === null || update.$push[key].$each === undefined) {
             update.$push[key] = {
               $each: [update.$push[key]]
             };
           }
-          update.$push[path].$each.push(p.value);
-        } else {
-          update.$push[path] = p.value;
+          if (update.$push[key].$position !== undefined) {
+            throw new Error("Unsupported Operation! can't use add op with mixed positions");
+          }
+          update.$push[key].$each.push(p.value);
         }
+      } else {
+        throw new Error("Unsupported Operation! can't use add op without position");
       }
-    }
-    else if(p.op === 'remove'){
-      if(!update.$unset) update.$unset = {};
+      break;
+    case 'remove':
+      update.$unset = update.$unset || {};
       update.$unset[toDot(p.path)] = 1;
-    }
-    else if(p.op === 'replace'){
-      if(!update.$set) update.$set = {};
+      break;
+    case 'replace':
+      update.$set = update.$set || {};
       update.$set[toDot(p.path)] = p.value;
-    }
-    else if(p.op !== 'test') {
+      break;
+    case 'test':
+      break;
+    default:
       throw new Error('Unsupported Operation! op = ' + p.op);
     }
   });
