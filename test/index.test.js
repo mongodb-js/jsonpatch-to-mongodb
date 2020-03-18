@@ -20,6 +20,22 @@ describe('jsonpatch to mongodb', function() {
     assert.deepEqual(toMongodb(patches), expected);
   });
 
+  it('should allow add to insert or replace a non-array field', function() {
+    var patches = [{
+      op: 'add',
+      path: '/name/nested',
+      value: 'dave'
+    }];
+
+    var expected = {
+      $set: {
+        'name.nested': 'dave'
+      }
+    };
+
+    assert.deepEqual(toMongodb(patches), expected);
+  });
+
   it('should work with escaped characters', function() {
     var patches = [{
       op: 'replace',
@@ -268,16 +284,6 @@ describe('jsonpatch to mongodb', function() {
     }];
 
     chai.expect(function(){toMongodb(patches)}).to.throw("Unsupported Operation! can't use add op with mixed positions");
-  });
-
-  it('should blow up on add without position', function() {
-    var patches = [{
-      op: 'add',
-      path: '/name',
-      value: 'dave'
-    }];
-
-    chai.expect(function(){toMongodb(patches)}).to.throw("Unsupported Operation! can't use add op without position");
   });
 
   it('should blow up on move', function() {
