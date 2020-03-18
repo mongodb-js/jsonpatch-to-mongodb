@@ -15,9 +15,8 @@ module.exports = function(patches){
       var key = parts.slice(0, -1).join('.');
       var $position = positionPart && parseInt(positionPart, 10) || null;
 
-      update.$push = update.$push || {};
-
       if ($position !== null) {
+        update.$push = update.$push || {};
         if (update.$push[key] === undefined) {
           update.$push[key] = {
             $each: [p.value],
@@ -35,6 +34,7 @@ module.exports = function(patches){
           update.$push[key].$position = Math.min($position, update.$push[key].$position);
         }
       } else if(addToEnd) {
+        update.$push = update.$push || {};
         if (update.$push[key] === undefined) {
           update.$push[key] = p.value;
         } else {
@@ -49,7 +49,8 @@ module.exports = function(patches){
           update.$push[key].$each.push(p.value);
         }
       } else {
-        throw new Error("Unsupported Operation! can't use add op without position");
+        update.$set = update.$set || {};
+        update.$set[toDot(p.path)] = p.value;
       }
       break;
     case 'remove':
